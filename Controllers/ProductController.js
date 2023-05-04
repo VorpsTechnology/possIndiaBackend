@@ -441,6 +441,7 @@ export const filterByMinToMax=async(req,res)=>{
 
 export const search=async(req,res)=>{
   try {
+    console.log("haiii");
     const {search}=req.body
     const pattern=`/${search}/`
     console.log(pattern);
