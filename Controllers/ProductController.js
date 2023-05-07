@@ -267,7 +267,7 @@ export const allProducts=async(req,res)=>{
     const brandd=brandCatagoryy.length>0?brandCatagoryy:brand
  
     const data=await productModel.aggregate([ {$match:{ typeCatagory: {$in:typee},petCategory:{$in:pett},
-    brandCategory:{$in:brandd}}} ])
+    brandCategory:{$in:brandd}}} ,{ $limit: 20 }])
    
    
     console.log("haiii",data.length);
@@ -445,7 +445,7 @@ export const search=async(req,res)=>{
     const {search}=req.body
     const pattern=`/${search}/`
     console.log(pattern);
-    const data=await productModel.find({ "name" : { $regex: search, $options: 'i' } })
+    const data=await productModel.find({ "name" : { $regex: search, $options: 'i' } }).limit(20)
     res.status(200).json(data)
   } catch (error) {
     res.status(500).json(error)
