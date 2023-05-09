@@ -303,7 +303,7 @@ export const getProduct=async(req,res)=>{
 export const deleteProduct=async(req,res)=>{
     try {
         const productId=req.params.id
-         const data=await productModel.deleteOne({productId})
+         const data=await productModel.findByIdAndRemove({_id:productId})
     console.log(data,productId);
          res.status(200).json(data)
     } catch (error) {
@@ -357,8 +357,8 @@ export const filtering = async (req,res)=>{
   try {
 
     console.log("haiiiii");
-     const data=await productModel.find()
-     const beta=data.reverse()
+     const data=await productModel.find().limit(30)
+     const beta=data
   
      res.status(200).json(beta)
   } catch (error) {

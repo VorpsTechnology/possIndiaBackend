@@ -100,7 +100,7 @@ export const adminOrders=async(req,res)=>{
      
     const orderlist1 =await OrderModel.find(
       
-      {OrderStatus:{$nin:["CANCELLED", "RETURN", "ACCEPTRETURN"]
+      {OrderStatus:{$nin:["CANCELLED", "RETURN", "ACCEPTRETURN","CANCELACCEPTED", "CANCELRETURN"]
         
         }}
       
@@ -148,8 +148,13 @@ export const returnReq=async(req,res)=>{
 export const cancelledOrders=async(req,res)=>{
   try {
      
-    const orderlist2 =await OrderModel.find({OrderStatus:"CANCELLED"})
+    const orderlist2 =await OrderModel.find(
+      {OrderStatus:{$in:["CANCELLED", "CANCELACCEPTED"]
+        
+        }}
+      )
     const orderlist=orderlist2.reverse()
+    console.log(orderlist2.reverse());
     res.status(200).json({orderlist})
     } catch (error) {
       res.status(500).json(error)
