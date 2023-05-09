@@ -58,7 +58,7 @@ export const addToWishlist=async(req,res)=>{
 export const removeFromWishlist=async(req,res)=>{
     try {
        const {userId,productId}=req.body 
-
+console.log(req.body);
       const cart=await WishlistModel.findOneAndUpdate({ownerId:userId}, { $pull: { products: { product: productId } } },{new:true})
      res.status(200).json({cart})
     } catch (error) {

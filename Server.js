@@ -19,6 +19,7 @@ import ShippingRoute from "./Routes/shippingRoute.js"
 import ContactRoute from "./Routes/contactRoute.js"
 import BlogRoute from "./Routes/BlogRoute.js"
 import AdminRoute from "./Routes/AdminRoute.js"
+import UserRoute from "./Routes/UserRoute.js"
 const app=express();
 
 app.use(express.static("public"))
@@ -42,6 +43,7 @@ app.get("/test",(req,res)=>{
     res.send("hello ")
 })
     app.use("/auth",AuthRoute)  
+    app.use("/user",UserRoute) 
     app.use("/product",ProductRoute) 
     app.use("/wishlist",WishlistRoute) 
      app.use("/order",OrderRoute) 

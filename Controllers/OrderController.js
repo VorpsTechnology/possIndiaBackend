@@ -1,7 +1,20 @@
 import OrderModel from "../Models/OrderModel.js";
 import UserModel from "../Models/userModel.js";
 import nodemailer from "nodemailer"
+export const remove=async(req,res)=>{
+  try {
+    const {orderId}=req.body
+    console.log(req.body);
+    const data =await OrderModel.findByIdAndRemove({_id:orderId})
 
+      res.status(200).json(data)
+   
+    
+    
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
 export const create=async(req,res)=>{
     try {
         console.log("haiii");  
@@ -9,13 +22,6 @@ export const create=async(req,res)=>{
 
        const Orders=await newOrder.save()
        const {userId}=req.body
-       const address={
-        address1:req.body.deliveryAddress.address1,
-        city:req.body.deliveryAddress.city,
-        state:req.body.deliveryAddress.state,
-        post:req.body.deliveryAddress.post
-       }
-       await UserModel.findByIdAndUpdate({_id:userId},{ $addToSet:{address:address}},{new:true})
        var Transport=nodemailer.createTransport({
         service:"Gmail",
         auth:{
@@ -108,7 +114,7 @@ export const adminOrders=async(req,res)=>{
 
 export const adminreturn=async(req,res)=>{
   try{
-  const orderlist1 =await OrderModel.find({OrderStatus:{$nin:["ORDERED","DISPATCHED","DELIVERED","CANCELLED"]}})
+  const orderlist1 =await OrderModel.find({OrderStatus:{$nin:["ORDERED","DISPATCHED","DELIVERED","CANCELLED","REMOVED",""]}})
   const orderlist=orderlist1.reverse()
   res.status(200).json({orderlist})
   } catch (error) {

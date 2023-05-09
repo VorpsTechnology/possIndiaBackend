@@ -31,7 +31,9 @@ const UserSchema=mongoose.Schema(
           type:String
         },
         address:{
-          type:Array
+          type:Array,
+          default:[]
+
         },
         
         profilePicture:String,

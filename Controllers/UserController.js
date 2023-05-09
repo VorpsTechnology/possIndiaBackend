@@ -42,38 +42,79 @@ export const getUser=async (req,res)=>{
 //update a user
 
 export const updateUser=async(req,res)=>{
-
+console.log(req.body);
     const id=req.params.id;
-    const {_id,currentUserAdminStatus,password}=req.body;
-     
-   
-
-
-    if(id===_id ){
-        try {
-
-            if(password)
-            {
-              const salt =await bcrypt.genSalt(10)
-              req.body.password= await bcrypt.hash(password,salt) 
+    const {_id,oldPass,password  }=req.body;
+    if(oldPass){
+        const user=await UserModel.findOne({_id: _id})
+       
+        if(user){
+         const validity=await bcrypt.compare(oldPass, user.password)
+           if(!validity){
+            res.status(400).json("Old Password didnt match")
+           }else{
+            if(id===_id ){
+                try {
+        
+                    if(password)
+                    {
+                      const salt =await bcrypt.genSalt(10)
+                      req.body.password= await bcrypt.hash(password,salt) 
+                    }
+                   const user =await UserModel.findByIdAndUpdate(id,req.body,{new:true})
+        
+                  const token=jwt.sign({
+                    username:user.username,
+                    id:user._id
+                  },process.env.JWT_KEY,{expiresIn:"1h"})
+                   res.status(200).json({user,token})
+        
+        
+                } catch (error) {
+                    res.status(500).json(error) 
+                }
+            }else{
+                res.status(403).json("Access denied ! you can update only ypur own profile")
             }
-           const user =await UserModel.findByIdAndUpdate(id,req.body,{new:true})
-
-          const token=jwt.sign({
-            username:user.username,
-            id:user._id
-          },process.env.JWT_KEY,{expiresIn:"1h"})
-           res.status(200).json({user,token})
+           }
+       }}
+ 
 
 
-        } catch (error) {
-            res.status(500).json(error) 
-        }
-    }else{
-        res.status(403).json("Access denied ! you can update only ypur own profile")
+   
+}
+export const address=async(req,res)=>{
+    try {
+        const{deliveryAddress,userId}=req.body
+        const address={
+            address1:deliveryAddress.address1,
+            city:deliveryAddress.city,
+            state:deliveryAddress.state,
+            post:deliveryAddress.post,
+            country:deliveryAddress.country
+           }
+          const data= await UserModel.findByIdAndUpdate({_id:userId},{ $addToSet:{address:address}},{new:true})
+          res.status(200).json(data)
+    } catch (error) {
+        res.status(500).json(error)
     }
 }
 
+
+export const removeaddress=async(req,res)=>{
+    try {
+        try {
+            const {userId,address1}=req.body 
+
+           const data=await UserModel.findOneAndUpdate({_id:userId}, { $pull: { address: { address1: address1 } } },{new:true})
+          res.status(200).json(data)
+         } catch (error) {
+             res.status(500).json(error) 
+         }
+    } catch (error) {
+        res.status(500).json(error)
+    }
+}
 export const deleteUser=async (req,res)=>{
     const id=req.params.id;
     const  {currentUserId,currentUserAdminStatus}=req.body;
