@@ -152,7 +152,8 @@ export const editProduct=async(req,res)=>{
 export const allProducts=async(req,res)=>{
    try {  
     console.log(req.body);
-    const{petCatagoryy,typeCatagoryy,brandCatagoryy}=req.body
+    const{petCatagoryy,typeCatagoryy,brandCatagoryy,limit}=req.body
+    
     console.log(petCatagoryy,typeCatagoryy,brandCatagoryy);
     const pet=["DOG","CAT","FISH","BIRD","TURTLE","HAMSTER","GUINEA PIG","RABBIT"]
     const type=["FOOD","TOY","ACCESSORIES","TREAT","BEDS","MAT","APPARELS","HEALTH & HYGIENE"]
@@ -265,9 +266,9 @@ export const allProducts=async(req,res)=>{
     const pett=petCatagoryy.length>0?petCatagoryy:pet
     const typee=typeCatagoryy.length>0?typeCatagoryy:type
     const brandd=brandCatagoryy.length>0?brandCatagoryy:brand
- 
+    const limits=limit?limit:20
     const data=await productModel.aggregate([ {$match:{ typeCatagory: {$in:typee},petCategory:{$in:pett},
-    brandCategory:{$in:brandd}}} ,{ $limit: 20 }])
+    brandCategory:{$in:brandd}}} ,{ $limit: limits }])
    
    
     console.log("haiii",data.length);
