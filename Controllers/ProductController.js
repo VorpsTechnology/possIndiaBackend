@@ -268,7 +268,10 @@ export const allProducts=async(req,res)=>{
     const brandd=brandCatagoryy.length>0?brandCatagoryy:brand
     const limits=limit?limit:20
     const data=await productModel.aggregate([ {$match:{ typeCatagory: {$in:typee},petCategory:{$in:pett},
-    brandCategory:{$in:brandd}}} ,{ $limit: limits }])
+    brandCategory:{$in:brandd}}} 
+    // ,{ $limit: limits }
+  
+  ])
    
    
     console.log("haiii",data.length);
@@ -358,7 +361,7 @@ export const filtering = async (req,res)=>{
   try {
 
     console.log("haiiiii");
-     const data=await productModel.find().limit(30)
+     const data=await productModel.find()
      const beta=data
   
      res.status(200).json(beta)

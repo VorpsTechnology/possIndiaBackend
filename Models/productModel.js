@@ -19,6 +19,9 @@ const ProductSchema=mongoose.Schema(
         maxPrice:{
             type:Number
         },
+        weight:{
+            type:Number
+        },
         desc:{
             type:String,
            
