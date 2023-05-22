@@ -309,7 +309,7 @@ export const deleteProduct=async(req,res)=>{
         const productId=req.params.id
          const data=await productModel.findByIdAndRemove({_id:productId})
     console.log(data,productId);
-         res.status(200).json(data)
+         res.status(200).json(data) 
     } catch (error) {
       res.status(500).json(error)
     }
